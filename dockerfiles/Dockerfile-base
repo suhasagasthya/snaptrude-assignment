@@ -1,0 +1,32 @@
+ARG BUILDERIMAGE="busybox:1.36.1-glibc"
+ARG BASEIMAGE="node:20.3.0-bullseye-slim"
+FROM $BUILDERIMAGE as builder
+
+ARG username=app
+ENV USERNAME $username
+
+ARG gid=2001
+ARG uid=1001
+
+ARG data_path=/app
+ENV DATA_PATH  $data_path
+
+RUN addgroup -g $gid $USERNAME \
+      && adduser -DH -u $uid $USERNAME -G $USERNAME  \
+      && mkdir -p "$DATA_PATH" \
+      && chown -R $USERNAME:$USERNAME "$DATA_PATH"
+
+############################################
+
+FROM $BASEIMAGE
+ARG username=app
+ENV USERNAME $username
+
+ARG data_path=/app
+ENV DATA_PATH  $data_path
+
+COPY --from=builder /etc/passwd /etc/passwd
+COPY --from=builder /etc/group /etc/group
+COPY --from=builder --chown=$USERNAME:$USERNAME /app /app
+WORKDIR $DATA_PATH
+USER $USERNAME:$USERNAME

@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: snaptrude-sa
+  namespace: snaptrude
+imagePullSecrets:
+  - name: snaptrude-image-secret

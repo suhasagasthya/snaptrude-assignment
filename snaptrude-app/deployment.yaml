@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: snaptrude-js-app
+  namespace: snaptrude
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: snaptrude-js-app
+  template:
+    metadata:
+      labels:
+        app: snaptrude-js-app
+    spec:
+      containers:
+        - name: snaptrude-js-app-container
+          image: suhasagasthya/dockerhub:v1.0.0-assignment
+          ports:
+            - containerPort: 6041
+              name: snaptrude-port
+              protocol: TCP
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+              - ALL
+            readOnlyRootFilesystem: true
+          resources:
+            limits:
+              cpu: "1"
+              memory: "512Mi"
+            requests:
+              cpu: "0.1"
+              memory: "10Mi"
+      serviceAccountName: snaptrude-sa
+      serviceAccount: snaptrude-sa
+      securityContext:
+        fsGroup: 2001
+        fsGroupChangePolicy: OnRootMismatch
+        runAsGroup: 2001
+        runAsNonRoot: true
+        runAsUser: 1001
+        seccompProfile:
+          type: RuntimeDefault
