@@ -4,7 +4,7 @@
 
 ## Architecture and Traffic Flow
 
-
+![Snaptrude App Traffic Flow](https://github.com/suhasagasthya/snaptrude-assignment/blob/main/snaptrude_sample_flow.jpg?raw=true)
 
 
 ## Deployment Steps and Explanation
